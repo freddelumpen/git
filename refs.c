@@ -70,14 +70,17 @@ struct ref_namespace_info ref_namespace[] = {
 		.ref = "HEAD",
 		.decoration = DECORATION_REF_HEAD,
 		.exact = 1,
+		.include = 1,
 	},
 	[NAMESPACE_BRANCHES] = {
 		.ref = "refs/heads/",
 		.decoration = DECORATION_REF_LOCAL,
+		.include = 1,
 	},
 	[NAMESPACE_TAGS] = {
 		.ref = "refs/tags/",
 		.decoration = DECORATION_REF_TAG,
+		.include = 1,
 	},
 	[NAMESPACE_REMOTE_REFS] = {
 		/*
@@ -87,6 +90,7 @@ struct ref_namespace_info ref_namespace[] = {
 		 */
 		.ref = "refs/remotes/",
 		.decoration = DECORATION_REF_REMOTE,
+		.include = 1,
 	},
 	[NAMESPACE_STASH] = {
 		/*
@@ -96,6 +100,7 @@ struct ref_namespace_info ref_namespace[] = {
 		.ref = "refs/stash",
 		.exact = 1,
 		.decoration = DECORATION_REF_STASH,
+		.include = 1,
 	},
 	[NAMESPACE_REPLACE] = {
 		/*
@@ -107,6 +112,7 @@ struct ref_namespace_info ref_namespace[] = {
 		 */
 		.ref = "refs/replace/",
 		.decoration = DECORATION_GRAFTED,
+		.include = 1,
 	},
 	[NAMESPACE_NOTES] = {
 		/*
@@ -135,6 +141,54 @@ struct ref_namespace_info ref_namespace[] = {
 		 * interactive rebase that uses the 'merge' command.
 		 */
 		.ref = "refs/rewritten/",
+	},
+	[NAMESPACE_REFS] = {
+		/*
+		 * Catch-all for any other refs.
+		 */
+		.ref = "refs/",
+		.decoration = DECORATION_REF,
+	},
+	[NAMESPACE_ORIG_HEAD] = {
+		.ref = "ORIG_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_MERGE_HEAD] = {
+		.ref = "MERGE_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_REBASE_HEAD] = {
+		.ref = "REBASE_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_CHERRY_PICK_HEAD] = {
+		.ref = "CHERRY_PICK_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_REVERT_HEAD] = {
+		.ref = "REVERT_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_BISECT_HEAD] = {
+		.ref = "BISECT_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_FETCH_HEAD] = {
+		.ref = "FETCH_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
 	},
 };
 
@@ -551,12 +605,8 @@ void normalize_glob_ref(struct string_list_item *item, const char *prefix,
 	if (prefix)
 		strbuf_addstr(&normalized_pattern, prefix);
 	else if (!starts_with(pattern, "refs/") &&
-		   strcmp(pattern, "HEAD"))
+		 !is_pseudoref_syntax(pattern))
 		strbuf_addstr(&normalized_pattern, "refs/");
-	/*
-	 * NEEDSWORK: Special case other symrefs such as REBASE_HEAD,
-	 * MERGE_HEAD, etc.
-	 */
 
 	strbuf_addstr(&normalized_pattern, pattern);
 	strbuf_strip_suffix(&normalized_pattern, "/");
@@ -827,7 +877,7 @@ int is_per_worktree_ref(const char *refname)
 	       starts_with(refname, "refs/rewritten/");
 }
 
-static int is_pseudoref_syntax(const char *refname)
+int is_pseudoref_syntax(const char *refname)
 {
 	const char *c;
 

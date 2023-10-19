@@ -123,6 +123,8 @@ int should_autocreate_reflog(const char *refname);
 
 int is_branch(const char *refname);
 
+int is_pseudoref_syntax(const char *refname);
+
 int refs_init_db(struct strbuf *err);
 
 /*
@@ -987,10 +989,14 @@ struct ref_namespace_info {
 	 * If 'exact' is true, then we must match the 'ref' exactly.
 	 * Otherwise, use a prefix match.
 	 *
+	 * If 'include' is true, the namespace is included in the
+	 * default decoration filters.
+	 *
 	 * 'ref_updated' is for internal use. It represents whether the
 	 * 'ref' value was replaced from its original literal version.
 	 */
 	unsigned exact:1,
+		 include:1,
 		 ref_updated:1;
 };
 
@@ -1004,6 +1010,14 @@ enum ref_namespace {
 	NAMESPACE_NOTES,
 	NAMESPACE_PREFETCH,
 	NAMESPACE_REWRITTEN,
+	NAMESPACE_REFS,
+	NAMESPACE_ORIG_HEAD,
+	NAMESPACE_MERGE_HEAD,
+	NAMESPACE_REBASE_HEAD,
+	NAMESPACE_CHERRY_PICK_HEAD,
+	NAMESPACE_REVERT_HEAD,
+	NAMESPACE_BISECT_HEAD,
+	NAMESPACE_FETCH_HEAD,
 
 	/* Must be last */
 	NAMESPACE__COUNT

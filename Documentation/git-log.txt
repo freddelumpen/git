@@ -52,9 +52,10 @@ OPTIONS
 	the decorations, but an explicit `--decorate-refs` pattern will
 	override a match in `log.excludeDecoration`.
 +
-If none of these options or config settings are given, then references are
-used as decoration if they match `HEAD`, `refs/heads/`, `refs/remotes/`,
-`refs/stash/`, or `refs/tags/`.
+If none of these options or config settings are given, then refs matching
+`refs/heads/`, `refs/remotes/`, `refs/stash/`, or `refs/tags/`, as well as
+the `HEAD` ref and the pseudorefs `ORIG_HEAD`, `MERGE_HEAD`, `REBASE_HEAD`,
+`CHERRY_PICK_HEAD`, `REVERT_HEAD` and `BISECT_HEAD` are shown.
 
 --clear-decorations::
 	When specified, this option clears all previous `--decorate-refs`

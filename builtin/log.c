@@ -227,10 +227,8 @@ static void set_default_decoration_filter(struct decoration_filter *decoration_f
 	 * populate with sensible defaults.
 	 */
 	for (i = 0; i < ARRAY_SIZE(ref_namespace); i++) {
-		if (!ref_namespace[i].decoration)
-			continue;
-
-		string_list_append(include, ref_namespace[i].ref);
+		if (ref_namespace[i].include)
+			string_list_append(include, ref_namespace[i].ref);
 	}
 }
 
