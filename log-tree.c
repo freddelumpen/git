@@ -41,6 +41,7 @@ static char decoration_colors[][COLOR_MAXLEN] = {
 	[DECORATION_REF_STASH]	= GIT_COLOR_BOLD_MAGENTA,
 	[DECORATION_REF]	= GIT_COLOR_BOLD_MAGENTA,
 	[DECORATION_REF_HEAD]	= GIT_COLOR_BOLD_CYAN,
+	[DECORATION_REF_PSEUDO]	= GIT_COLOR_BOLD_BLUE,
 	[DECORATION_GRAFTED]	= GIT_COLOR_BOLD_BLUE,
 	[DECORATION_SYMBOL]	= GIT_COLOR_NIL,
 };
@@ -52,6 +53,7 @@ static const char *color_decorate_slots[] = {
 	[DECORATION_REF_STASH]	= "stash",
 	[DECORATION_REF]	= "ref",
 	[DECORATION_REF_HEAD]	= "HEAD",
+	[DECORATION_REF_PSEUDO]	= "pseudoref",
 	[DECORATION_GRAFTED]	= "grafted",
 	[DECORATION_SYMBOL]	= "symbol",
 };
@@ -146,6 +148,32 @@ static int ref_filter_match(const char *refname,
 	return 1;
 }
 
+static void add_pseudoref_decorations(const struct decoration_filter *filter)
+{
+	struct ref_store *store = get_main_ref_store(the_repository);
+	int i;
+
+	for (i = 0; i < ARRAY_SIZE(ref_namespace); i++) {
+		struct object_id oid;
+		struct object *obj;
+		enum object_type objtype;
+		const struct ref_namespace_info *info = &ref_namespace[i];
+
+		if (info->decoration != DECORATION_REF_PSEUDO ||
+		    !refs_resolve_ref_unsafe(store, info->ref,
+					     RESOLVE_REF_READING, &oid, NULL) ||
+		    (filter && !ref_filter_match(info->ref, filter)))
+			continue;
+
+		objtype = oid_object_info(the_repository, &oid, NULL);
+		if (objtype < 0)
+			continue;
+
+		obj = lookup_object_by_type(the_repository, &oid, objtype);
+		add_name_decoration(DECORATION_REF_PSEUDO, info->ref, obj);
+	}
+}
+
 static int add_ref_decoration(const char *refname, const struct object_id *oid,
 			      int flags UNUSED,
 			      void *cb_data)
@@ -236,6 +264,7 @@ void load_ref_decorations(struct decoration_filter *filter, int flags)
 		decoration_loaded = 1;
 		decoration_flags = flags;
 		for_each_ref(add_ref_decoration, filter);
+		add_pseudoref_decorations(filter);
 		head_ref(add_ref_decoration, filter);
 		for_each_commit_graft(add_graft_decoration, filter);
 	}

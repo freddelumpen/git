@@ -149,6 +149,47 @@ struct ref_namespace_info ref_namespace[] = {
 		.ref = "refs/",
 		.decoration = DECORATION_REF,
 	},
+	[NAMESPACE_ORIG_HEAD] = {
+		.ref = "ORIG_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_MERGE_HEAD] = {
+		.ref = "MERGE_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_REBASE_HEAD] = {
+		.ref = "REBASE_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_CHERRY_PICK_HEAD] = {
+		.ref = "CHERRY_PICK_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_REVERT_HEAD] = {
+		.ref = "REVERT_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_BISECT_HEAD] = {
+		.ref = "BISECT_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+		.include = 1,
+	},
+	[NAMESPACE_FETCH_HEAD] = {
+		.ref = "FETCH_HEAD",
+		.exact = 1,
+		.decoration = DECORATION_REF_PSEUDO,
+	},
 };
 
 void update_ref_namespace(enum ref_namespace namespace, char *ref)

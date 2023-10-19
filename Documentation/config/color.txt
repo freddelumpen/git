@@ -95,6 +95,8 @@ color.decorate.<slot>::
 `ref`;;
 	any other refs (not shown unless enabled with one of the decoration
 	filter options such as `--decorate-refs=<pattern>`)
+`pseudoref`;;
+	pseudorefs such as ORIG_HEAD or MERGE_HEAD
 `symbol`;;
 	punctuation surrounding the other elements
 --
