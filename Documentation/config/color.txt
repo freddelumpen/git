@@ -92,6 +92,9 @@ color.decorate.<slot>::
 	the stash ref
 `grafted`;;
 	grafted commits (used to implement shallow clones)
+`ref`;;
+	any other refs (not shown unless enabled with one of the decoration
+	filter options such as `--decorate-refs=<pattern>`)
 `symbol`;;
 	punctuation surrounding the other elements
 --

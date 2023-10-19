@@ -142,6 +142,13 @@ struct ref_namespace_info ref_namespace[] = {
 		 */
 		.ref = "refs/rewritten/",
 	},
+	[NAMESPACE_REFS] = {
+		/*
+		 * Catch-all for any other refs.
+		 */
+		.ref = "refs/",
+		.decoration = DECORATION_REF,
+	},
 };
 
 void update_ref_namespace(enum ref_namespace namespace, char *ref)
