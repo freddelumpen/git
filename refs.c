@@ -70,14 +70,17 @@ struct ref_namespace_info ref_namespace[] = {
 		.ref = "HEAD",
 		.decoration = DECORATION_REF_HEAD,
 		.exact = 1,
+		.include = 1,
 	},
 	[NAMESPACE_BRANCHES] = {
 		.ref = "refs/heads/",
 		.decoration = DECORATION_REF_LOCAL,
+		.include = 1,
 	},
 	[NAMESPACE_TAGS] = {
 		.ref = "refs/tags/",
 		.decoration = DECORATION_REF_TAG,
+		.include = 1,
 	},
 	[NAMESPACE_REMOTE_REFS] = {
 		/*
@@ -87,6 +90,7 @@ struct ref_namespace_info ref_namespace[] = {
 		 */
 		.ref = "refs/remotes/",
 		.decoration = DECORATION_REF_REMOTE,
+		.include = 1,
 	},
 	[NAMESPACE_STASH] = {
 		/*
@@ -96,6 +100,7 @@ struct ref_namespace_info ref_namespace[] = {
 		.ref = "refs/stash",
 		.exact = 1,
 		.decoration = DECORATION_REF_STASH,
+		.include = 1,
 	},
 	[NAMESPACE_REPLACE] = {
 		/*
@@ -107,6 +112,7 @@ struct ref_namespace_info ref_namespace[] = {
 		 */
 		.ref = "refs/replace/",
 		.decoration = DECORATION_GRAFTED,
+		.include = 1,
 	},
 	[NAMESPACE_NOTES] = {
 		/*

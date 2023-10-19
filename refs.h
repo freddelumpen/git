@@ -987,10 +987,14 @@ struct ref_namespace_info {
 	 * If 'exact' is true, then we must match the 'ref' exactly.
 	 * Otherwise, use a prefix match.
 	 *
+	 * If 'include' is true, the namespace is included in the
+	 * default decoration filters.
+	 *
 	 * 'ref_updated' is for internal use. It represents whether the
 	 * 'ref' value was replaced from its original literal version.
 	 */
 	unsigned exact:1,
+		 include:1,
 		 ref_updated:1;
 };
 
