@@ -564,12 +564,8 @@ void normalize_glob_ref(struct string_list_item *item, const char *prefix,
 	if (prefix)
 		strbuf_addstr(&normalized_pattern, prefix);
 	else if (!starts_with(pattern, "refs/") &&
-		   strcmp(pattern, "HEAD"))
+		 !is_pseudoref_syntax(pattern))
 		strbuf_addstr(&normalized_pattern, "refs/");
-	/*
-	 * NEEDSWORK: Special case other symrefs such as REBASE_HEAD,
-	 * MERGE_HEAD, etc.
-	 */
 
 	strbuf_addstr(&normalized_pattern, pattern);
 	strbuf_strip_suffix(&normalized_pattern, "/");
@@ -840,7 +836,7 @@ int is_per_worktree_ref(const char *refname)
 	       starts_with(refname, "refs/rewritten/");
 }
 
-static int is_pseudoref_syntax(const char *refname)
+int is_pseudoref_syntax(const char *refname)
 {
 	const char *c;
 

@@ -123,6 +123,8 @@ int should_autocreate_reflog(const char *refname);
 
 int is_branch(const char *refname);
 
+int is_pseudoref_syntax(const char *refname);
+
 int refs_init_db(struct strbuf *err);
 
 /*
